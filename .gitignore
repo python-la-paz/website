@@ -130,3 +130,8 @@ dmypy.json
 
 #VS Code
 .vscode
+
+
+#Actual Project
+website/media/*
+!website/media/Readme.md

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
 {% load static %}
 
 {% block body_class %}template-homepage{% endblock %}
@@ -9,5 +10,148 @@
 {% endblock extra_css %}
 
 {% block content %}
-{{ page.header|richtext }}
+<div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+        <div class="container">
+            <br><br>
+            <div class="header  ">
+                {{ page.header|richtext }}
+            </div>
+            <div class="row ">
+
+                <h5 class="header col s12 light">{{ page.small_header|richtext }}</h5>
+            </div>
+            <div class="row">
+                {% for link in page.links %}
+                {% if link.value.image is not none %}
+                {% image link.value.image format-webp-lossless as tmp_photo_link %}
+                <a class="btn-floating btn-flat waves-effect waves-light transparent btn-floating-svg"
+                    href="{{link.value.link}}" target="_blank">
+                    <img src="{{tmp_photo_link.url}}" width="100%" alt="{{link.value.name}}" />
+                </a>
+                {% else %}
+                {% if link.value.imageSVG is not none %}
+                <a class="btn-floating btn-flat waves-effect waves-light transparent btn-floating-svg"
+                    href="{{link.value.link}}" target="_blank">
+                    <img src="{{link.value.imageSVG.url}}" width="100%" alt="{{link.value.name}}" />
+                </a>
+                {% else %}
+                <a class="btn-floating btn-flat waves-effect waves-light transparent" href="{{link.value.link}}"
+                    target="_blank">
+                    <i class="material-icons">{{link.value.icon}}</i>
+                </a>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </div>
+            <br><br>
+
+        </div>
+    </div>
+
+    {% image page.banner format-webp-lossless as tmp_photo %}
+    <div class="parallax"><img class="parallax-img" src="{{ tmp_photo.url }}" alt="{{ tmp_photo.alt }}"></div>
+
+</div>
+<div class="container">
+    <div class="section">
+
+        <div class="row">
+            <div class="col s12 center">
+                <h3><i class="mdi-content-send brown-text"></i></h3>
+                <h4>{{page.about_title}}</h4>
+                <div class="left-align light">{{page.about_content|richtext}}</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{%if organizers|length > 0 %}
+
+<div class="container">
+    <div class="section">
+
+        <div class="row">
+            <div class="col s12 center">
+                <h3><i class="mdi-content-send brown-text"></i></h3>
+                <h4>Oganizadores</h4>
+            </div>
+        </div>
+
+    </div>
+    <div class="section">
+        <div class="row">
+            {% for organizer in organizers %}
+            {% with organizer=organizer.specific %}
+
+            <div class="col s12 m6 l4">
+                {% if organizer.image is none %}
+                <div class="icon-block">
+                    <h1 class="center brown-text"><i class="material-icons">person</i></h1>
+                </div>
+                {% else %}
+                {% image organizer.image fill-160x160 format-webp-lossless as tmp_photo %}
+                <div class="center">
+                    <img class="circle  responsive-img" src="{{tmp_photo.url}}">
+                </div>
+                {% endif %}
+                <h5 class="center">{{organizer.name}}</h5>
+                <p class="light center">{{organizer.roles}}</p>
+                <div class="center">
+                    {% with organizer.links|first as first_net %}
+                    {% if organizer.links|length > 0  %}
+                    {% if first_net.value.image is not none %}
+                        {% image first_net.value.image format-webp-lossless as tmp_photo_link %}
+                        <a class="btn-floating btn-flat waves-effect waves-light red btn-floating-svg"
+                            href="{{first_net.value.link}}" target="_blank">
+                            <img src="{{tmp_photo_link.url}}" width="100%" alt="{{first_net.value.name}}" />
+                        </a>
+                        {% else %}
+                            {% if first_net.value.imageSVG is not none %}
+                            <a class="btn-floating btn-flat waves-effect waves-light red btn-floating-svg"
+                                href="{{first_net.value.link}}" target="_blank">
+                                <img src="{{first_net.value.imageSVG.url}}" width="100%" alt="{{first_net.value.name}}" />
+                            </a>
+                            {% else %}
+                            <a class="btn-floating btn-flat waves-effect waves-light red"
+                                href="{{first_net.value.link}}" target="_blank">
+                                <i class="material-icons">{{first_net.value.icon}}</i>
+                            </a>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+
+{% endif %}
+
+<div class="container">
+    <div class="section">
+
+        <div class="row">
+            <div class="col s12 center">
+                <h3><i class="mdi-content-send brown-text"></i></h3>
+                <h4>Contact Us</h4>
+                <p class="left-align light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                    scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna
+                    fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a sapien id, viverra
+                    ultrices eros. Morbi sem neque, posuere et pretium eget, bibendum sollicitudin lacus. Aliquam
+                    eleifend sollicitudin diam, eu mattis nisl maximus sed. Nulla imperdiet semper molestie. Morbi
+                    massa odio, condimentum sed ipsum ac, gravida ultrices erat. Nullam eget dignissim mauris, non
+                    tristique erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
+                    Curae;</p>
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock content %}

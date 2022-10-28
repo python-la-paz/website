@@ -24,6 +24,11 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
+    # tosvg
+    'wagtailsvg',
+    'wagtail.contrib.modeladmin',
+    'generic_chooser',
+    # end tosvg
     "home",
     "search",
     "wagtail.contrib.forms",
@@ -137,6 +142,7 @@ STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
 ]
 
+WAGTAILSVG_UPLOAD_FOLDER = 'media'
 # ManifestStaticFilesStorage is recommended in production, to prevent outdated
 # JavaScript / CSS assets being served from cache (e.g. after a Wagtail upgrade).
 # See https://docs.djangoproject.com/en/4.1/ref/contrib/staticfiles/#manifeststaticfilesstorage

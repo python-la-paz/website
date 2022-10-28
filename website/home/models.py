@@ -1,3 +1,5 @@
+from email.policy import default
+from random import choices
 from django.db import models
 from wagtail.admin.panels import FieldPanel
 from wagtail.core import blocks
@@ -6,6 +8,7 @@ from wagtail.fields import RichTextField, StreamField
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import FieldPanel
 from wagtail.models import Page
+from wagtailsvg.blocks import SvgChooserBlock
 
 
 class HomePage(Page):
@@ -13,7 +16,20 @@ class HomePage(Page):
     small_header = RichTextField(blank=True)
     about_title = models.CharField(max_length=250, blank=True)
     about_content = RichTextField(blank=True)
-
+    banner = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+    logo = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
     links = StreamField(
         [
             (
@@ -23,6 +39,7 @@ class HomePage(Page):
                         ("name", blocks.CharBlock()),
                         ("icon", blocks.CharBlock()),
                         ("image", ImageChooserBlock(required=False)),
+                        ("imageSVG", SvgChooserBlock(required=False)),
                         ("link", blocks.URLBlock()),
                     ]
                 ),
@@ -32,12 +49,22 @@ class HomePage(Page):
     )
 
     content_panels = Page.content_panels + [
+        FieldPanel("logo"),
+        FieldPanel("banner"),
         FieldPanel("header"),
         FieldPanel("small_header"),
         FieldPanel("about_title"),
         FieldPanel("about_content"),
         FieldPanel("links"),
     ]
+    def get_context(self, request):
+        # Update context to include only published posts, ordered by reverse-chron
+        context = super().get_context(request)
+        organizers = self.get_children().live().type(Organizers)  # type: ignore
+        print (organizers)
+        # organizers = self.get_children().live().order_by('-first_published_at')
+        context['organizers'] = organizers
+        return context
 
 
 class Photos(Page):
@@ -59,6 +86,7 @@ class Photos(Page):
     )
 
 class Events(Page):
+
     name = models.CharField(max_length=500)
     about = RichTextField(blank=True)
     detail = RichTextField(blank=True)
@@ -79,6 +107,8 @@ class Events(Page):
                     [
                         ("name", blocks.CharBlock()),
                         ("icon", blocks.CharBlock()),
+                        ("image", ImageChooserBlock(required=False)),
+                        ("imageSVG", SvgChooserBlock(required=False)),
                         ("link", blocks.URLBlock()),
                     ]
                 ),
@@ -86,9 +116,15 @@ class Events(Page):
         ],
         blank=True,
     )
+    STATE_CHOICES = [
+        ("past", "Evento Pasado"),
+        ("current", "Evento Actual"),
+        ("upcoming", "Próximo Evento")
+    ]
+    state = models.CharField(max_length=20, choices=STATE_CHOICES, default="past")
 
 
-    content_panels = Page.content_panels + [
+    content_panels = Page.content_panels + [  # type: ignore
         FieldPanel("name"),
         FieldPanel("about"),
         FieldPanel("detail"),
@@ -96,6 +132,7 @@ class Events(Page):
         FieldPanel("date"),
         FieldPanel("banner"),
         FieldPanel("links"),
+        FieldPanel("state"),
     ]
 
 
@@ -125,6 +162,8 @@ class Organizers(Page):
                     [
                         ("name", blocks.CharBlock()),
                         ("icon", blocks.CharBlock()),
+                        ("image", ImageChooserBlock(required=False)),
+                        ("imageSVG", SvgChooserBlock(required=False)),
                         ("link", blocks.URLBlock()),
                     ]
                 ),
