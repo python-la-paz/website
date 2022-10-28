@@ -5,10 +5,6 @@
 
 {% block body_class %}template-homepage{% endblock %}
 
-{% block extra_css %}
-
-{% endblock extra_css %}
-
 {% block content %}
 <div id="index-banner" class="parallax-container">
     <div class="section no-pad-bot">
@@ -53,6 +49,18 @@
     <div class="parallax"><img class="parallax-img" src="{{ tmp_photo.url }}" alt="{{ tmp_photo.alt }}"></div>
 
 </div>
+{%if page.externalContentMiddle|length > 0 %}
+<div class="container">
+    <div class="section">
+        <div class="row">
+            {% for extra in page.externalContentMiddle %}
+            {{ extra.value.rawHTML }}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <div class="container">
     <div class="section">
 
@@ -236,11 +244,12 @@
                     {% for photo in album.images %}
                     {% if photo.value.image is not none %}
                     {% image photo.value.image fill-320x320 format-webp-lossless as tmp_photo %}
-                    {% image photo.value.image original  as tmp_photo_2 %}
-                    <a class="carousel-item"  href="{{tmp_photo_2.url}}" target="_blank" ><img  src="{{tmp_photo.url}}"></a>
+                    {% image photo.value.image original as tmp_photo_2 %}
+                    <a class="carousel-item" href="{{tmp_photo_2.url}}" target="_blank"><img
+                            src="{{tmp_photo.url}}"></a>
                     {% endif%}
                     {% endfor %}
-                  </div>
+                </div>
 
             </div>
         </div>
@@ -250,4 +259,33 @@
 {% endfor %}
 {% endif %}
 
+{%if page.externalContentFooter|length > 0 %}
+<div class="container">
+    <div class="section">
+        <div class="row">
+            {% for extra in page.externalContentFooter %}
+            {{ extra.value.rawHTML }}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% endblock content %}
+
+
+{%if page.externalScripts|length > 0 %}
+{% block extra_js %}
+{% for extra in page.externalScripts %}
+{{ extra.value.rawScripts }}
+{% endfor %}
+{% endblock extra_js %}
+{% endif %}
+
+{%if page.externalStyles|length > 0 %}
+{% block extra_css %}
+{% for extra in page.externalStyles %}
+{{ extra.value.rawStyles }}
+{% endfor %}
+{% endblock extra_css %}
+{% endif %}

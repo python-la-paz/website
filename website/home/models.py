@@ -45,6 +45,58 @@ class HomePage(Page):
         ],
         blank=True,
     )
+    externalStyles = StreamField(
+        [
+            (
+                "external",
+                blocks.StructBlock(
+                    [
+                        ("rawStyles", RawHTMLBlock(required=False)),
+                    ]
+                ),
+            ),
+        ],
+        blank=True,
+    )
+    externalScripts = StreamField(
+        [
+            (
+                "external",
+                blocks.StructBlock(
+                    [
+                        ("rawScripts", RawHTMLBlock(required=False)),
+                    ]
+                ),
+            ),
+        ],
+        blank=True,
+    )
+    externalContentMiddle = StreamField(
+        [
+            (
+                "external",
+                blocks.StructBlock(
+                    [
+                        ("rawHTML", RawHTMLBlock(required=False)),
+                    ]
+                ),
+            ),
+        ],
+        blank=True,
+    )
+    externalContentFooter = StreamField(
+        [
+            (
+                "external",
+                blocks.StructBlock(
+                    [
+                        ("rawHTML", RawHTMLBlock(required=False)),
+                    ]
+                ),
+            ),
+        ],
+        blank=True,
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel("logo"),
@@ -54,17 +106,22 @@ class HomePage(Page):
         FieldPanel("about_title"),
         FieldPanel("about_content"),
         FieldPanel("links"),
+        FieldPanel("externalStyles"),
+        FieldPanel("externalScripts"),
+        FieldPanel("externalContentMiddle"),
+        FieldPanel("externalContentFooter"), 
     ]
+
     def get_context(self, request):
         # Update context to include only published posts, ordered by reverse-chron
         context = super().get_context(request)
         organizers = self.get_children().live().type(Organizers)  # type: ignore
-        events = self.get_children().live().type(Events).order_by("-slug") # type: ignore
-        photos = self.get_children().live().type(Photos) # type: ignore
+        events = self.get_children().live().type(Events).order_by("-slug")  # type: ignore
+        photos = self.get_children().live().type(Photos)  # type: ignore
         # organizers = self.get_children().live().order_by('-first_published_at')
-        context['organizers'] = organizers
-        context['events'] = events
-        context['photos'] = photos
+        context["organizers"] = organizers
+        context["events"] = events
+        context["photos"] = photos
         return context
 
 
@@ -87,8 +144,9 @@ class Photos(Page):
     )
     content_panels = Page.content_panels + [  # type: ignore
         FieldPanel("name"),
-        FieldPanel("images")
+        FieldPanel("images"),
     ]
+
 
 class Events(Page):
 
@@ -131,7 +189,7 @@ class Events(Page):
     STATE_CHOICES = [
         ("past", "Evento Pasado"),
         ("current", "Evento Actual"),
-        ("upcoming", "Próximo Evento")
+        ("upcoming", "Próximo Evento"),
     ]
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default="past")
     externalRaws = StreamField(
@@ -147,7 +205,6 @@ class Events(Page):
         ],
         blank=True,
     )
-
 
     content_panels = Page.content_panels + [  # type: ignore
         FieldPanel("name"),
