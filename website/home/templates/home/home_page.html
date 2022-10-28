@@ -67,6 +67,90 @@
     </div>
 </div>
 
+{%if events|length > 0 %}
+
+<div class="container">
+    <div class="section">
+
+        <div class="row">
+            <div class="col s12 center">
+                <h3><i class="mdi-content-send brown-text"></i></h3>
+                <h4>Eventos</h4>
+            </div>
+        </div>
+
+    </div>
+    <div class="section">
+        <div class="row">
+            {% for event in events %}
+            {% with event=event.specific %}
+
+            <div class="col s12 m12 l12">
+                <div class="row">
+                    <div class="col s12 m3 l3">
+                        {% if event.image is none %}
+                        <div>
+                            <h1 class="center brown-text"><i class="large material-icons">event</i></h1>
+                        </div>
+                        {% else %}
+                        {% image event.image fill-256x256 format-webp-lossless as tmp_photo %}
+                        <div class="center">
+                            <img class="responsive-img" src="{{tmp_photo.url}}">
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col s12 m9 l9">
+                        <h5 class="">{{event.name}}
+                            {% if event.state == "past" %}
+                            <span class="badge " data-badge-caption="Finalizado" />
+                            {% endif %}
+                            {% if event.state == "current" %}
+                            <span class="new badge pyred" data-badge-caption="En curso" />
+                            {% endif %}
+                            {% if event.state == "upcoming" %}
+                            <span class="new badge pygreen" data-badge-caption="Próximamente" />
+                            {% endif %}
+                        </h5>
+                        <div class="light ">{{event.date}}</div>
+                        <div class="light ">{{event.city}}</div>
+                        <div class="light ">{{event.about|richtext}}</div>
+                        <div class="left">
+                            {% for link in event.links %}
+                            {% if link.value.image is not none %}
+                            {% image link.value.image format-webp-lossless as tmp_photo_link %}
+                            <a class="btn-floating btn-flat waves-effect waves-light pyred btn-floating-svg"
+                                href="{{link.value.link}}" target="_blank">
+                                <img src="{{tmp_photo_link.url}}" width="100%" alt="{{link.value.name}}" />
+                            </a>
+                            {% else %}
+                            {% if link.value.imageSVG is not none %}
+                            <a class="btn-floating btn-flat waves-effect waves-light pyred btn-floating-svg"
+                                href="{{link.value.link}}" target="_blank">
+                                <img src="{{link.value.imageSVG.url}}" width="100%" alt="{{link.value.name}}" />
+                            </a>
+                            {% else %}
+                            <a class="btn-floating btn-flat waves-effect waves-light pyred" href="{{link.value.link}}"
+                                target="_blank">
+                                <i class="material-icons">{{link.value.icon}}</i>
+                            </a>
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+
+{% endif %}
+
 {%if organizers|length > 0 %}
 
 <div class="container">
@@ -75,7 +159,7 @@
         <div class="row">
             <div class="col s12 center">
                 <h3><i class="mdi-content-send brown-text"></i></h3>
-                <h4>Oganizadores</h4>
+                <h4>Voluntarios</h4>
             </div>
         </div>
 
@@ -100,29 +184,30 @@
                 <p class="light center">{{organizer.roles}}</p>
                 <div class="center">
                     {% with organizer.links|first as first_net %}
-                    {% if organizer.links|length > 0  %}
+                    {% if organizer.links|length > 0 %}
                     {% if first_net.value.image is not none %}
-                        {% image first_net.value.image format-webp-lossless as tmp_photo_link %}
-                        <a class="btn-floating btn-flat waves-effect waves-light red btn-floating-svg"
-                            href="{{first_net.value.link}}" target="_blank">
-                            <img src="{{tmp_photo_link.url}}" width="100%" alt="{{first_net.value.name}}" />
-                        </a>
-                        {% else %}
-                            {% if first_net.value.imageSVG is not none %}
-                            <a class="btn-floating btn-flat waves-effect waves-light red btn-floating-svg"
-                                href="{{first_net.value.link}}" target="_blank">
-                                <img src="{{first_net.value.imageSVG.url}}" width="100%" alt="{{first_net.value.name}}" />
-                            </a>
-                            {% else %}
-                            <a class="btn-floating btn-flat waves-effect waves-light red"
-                                href="{{first_net.value.link}}" target="_blank">
-                                <i class="material-icons">{{first_net.value.icon}}</i>
-                            </a>
-                            {% endif %}
-                        {% endif %}
+                    {% image first_net.value.image format-webp-lossless as tmp_photo_link %}
+                    <a class="btn-floating btn-flat waves-effect waves-light pygreen btn-floating-svg"
+                        href="{{first_net.value.link}}" target="_blank">
+                        <img src="{{tmp_photo_link.url}}" width="100%" alt="{{first_net.value.name}}" />
+                    </a>
+                    {% else %}
+                    {% if first_net.value.imageSVG is not none %}
+                    <a class="btn-floating btn-flat waves-effect waves-light pygreen btn-floating-svg"
+                        href="{{first_net.value.link}}" target="_blank">
+                        <img src="{{first_net.value.imageSVG.url}}" width="100%" alt="{{first_net.value.name}}" />
+                    </a>
+                    {% else %}
+                    <a class="btn-floating btn-flat waves-effect waves-light pygreen" href="{{first_net.value.link}}"
+                        target="_blank">
+                        <i class="material-icons">{{first_net.value.icon}}</i>
+                    </a>
+                    {% endif %}
+                    {% endif %}
                     {% endif %}
                     {% endwith %}
                 </div>
+                <br />
             </div>
             {% endwith %}
             {% endfor %}
@@ -130,28 +215,39 @@
 
     </div>
 </div>
-
-
 {% endif %}
 
+{%if photos|length > 0 %}
+{% for album in photos %}
+{% with album=album.specific %}
 <div class="container">
     <div class="section">
-
         <div class="row">
             <div class="col s12 center">
                 <h3><i class="mdi-content-send brown-text"></i></h3>
-                <h4>Contact Us</h4>
-                <p class="left-align light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                    scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna
-                    fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a sapien id, viverra
-                    ultrices eros. Morbi sem neque, posuere et pretium eget, bibendum sollicitudin lacus. Aliquam
-                    eleifend sollicitudin diam, eu mattis nisl maximus sed. Nulla imperdiet semper molestie. Morbi
-                    massa odio, condimentum sed ipsum ac, gravida ultrices erat. Nullam eget dignissim mauris, non
-                    tristique erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
-                    Curae;</p>
+                <h4>{{album.name}}</h4>
             </div>
         </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="carousel">
+                    {% for photo in album.images %}
+                    {% if photo.value.image is not none %}
+                    {% image photo.value.image fill-320x320 format-webp-lossless as tmp_photo %}
+                    {% image photo.value.image original  as tmp_photo_2 %}
+                    <a class="carousel-item"  href="{{tmp_photo_2.url}}" target="_blank" ><img  src="{{tmp_photo.url}}"></a>
+                    {% endif%}
+                    {% endfor %}
+                  </div>
 
+            </div>
+        </div>
     </div>
 </div>
+{% endwith %}
+{% endfor %}
+{% endif %}
+
 {% endblock content %}

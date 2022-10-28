@@ -69,3 +69,11 @@ footer.page-footer {
     padding-right: 10px;
     padding-top: 5px;
 }
+
+.pyred {
+    background-color: #E25D60 !important;
+}
+
+.pygreen {
+    background-color: #468A2E !important;
+}

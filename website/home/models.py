@@ -1,5 +1,3 @@
-from email.policy import default
-from random import choices
 from django.db import models
 from wagtail.admin.panels import FieldPanel
 from wagtail.core import blocks
@@ -37,7 +35,7 @@ class HomePage(Page):
                 blocks.StructBlock(
                     [
                         ("name", blocks.CharBlock()),
-                        ("icon", blocks.CharBlock()),
+                        ("icon", blocks.CharBlock(default="link")),
                         ("image", ImageChooserBlock(required=False)),
                         ("imageSVG", SvgChooserBlock(required=False)),
                         ("link", blocks.URLBlock()),
@@ -61,9 +59,12 @@ class HomePage(Page):
         # Update context to include only published posts, ordered by reverse-chron
         context = super().get_context(request)
         organizers = self.get_children().live().type(Organizers)  # type: ignore
-        print (organizers)
+        events = self.get_children().live().type(Events).order_by("-slug") # type: ignore
+        photos = self.get_children().live().type(Photos) # type: ignore
         # organizers = self.get_children().live().order_by('-first_published_at')
         context['organizers'] = organizers
+        context['events'] = events
+        context['photos'] = photos
         return context
 
 
@@ -84,6 +85,10 @@ class Photos(Page):
         ],
         blank=True,
     )
+    content_panels = Page.content_panels + [  # type: ignore
+        FieldPanel("name"),
+        FieldPanel("images")
+    ]
 
 class Events(Page):
 
@@ -99,6 +104,13 @@ class Events(Page):
         on_delete=models.SET_NULL,
         related_name="+",
     )
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
     links = StreamField(
         [
             (
@@ -106,7 +118,7 @@ class Events(Page):
                 blocks.StructBlock(
                     [
                         ("name", blocks.CharBlock()),
-                        ("icon", blocks.CharBlock()),
+                        ("icon", blocks.CharBlock(default="link")),
                         ("image", ImageChooserBlock(required=False)),
                         ("imageSVG", SvgChooserBlock(required=False)),
                         ("link", blocks.URLBlock()),
@@ -122,6 +134,19 @@ class Events(Page):
         ("upcoming", "Próximo Evento")
     ]
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default="past")
+    externalRaws = StreamField(
+        [
+            (
+                "external",
+                blocks.StructBlock(
+                    [
+                        ("rawHTML", RawHTMLBlock(required=False)),
+                    ]
+                ),
+            ),
+        ],
+        blank=True,
+    )
 
 
     content_panels = Page.content_panels + [  # type: ignore
@@ -133,6 +158,8 @@ class Events(Page):
         FieldPanel("banner"),
         FieldPanel("links"),
         FieldPanel("state"),
+        FieldPanel("image"),
+        FieldPanel("externalRaws"),
     ]
 
 
@@ -161,7 +188,7 @@ class Organizers(Page):
                 blocks.StructBlock(
                     [
                         ("name", blocks.CharBlock()),
-                        ("icon", blocks.CharBlock()),
+                        ("icon", blocks.CharBlock(default="link")),
                         ("image", ImageChooserBlock(required=False)),
                         ("imageSVG", SvgChooserBlock(required=False)),
                         ("link", blocks.URLBlock()),
