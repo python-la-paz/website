@@ -1,0 +1,52 @@
+#Join file compose, prod, traefik, amd64
+version: '3.9' 
+volumes:
+  app_media: {}
+  db_data: {}
+services:
+  web:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/production/backend.conf:/etc/nginx/conf.d/default.conf
+      - app_media:/app/media
+    depends_on:
+      - app
+    labels:
+      - traefik.http.routers.${TRAEFIK_ROUTE}.rule=Host(${TRAEFIK_APP_DOMAIN})
+      - traefik.http.routers.${TRAEFIK_ROUTE}.tls=true
+      - traefik.http.routers.${TRAEFIK_ROUTE}.tls.certresolver=lets-encrypt
+      - traefik.port=${TRAEFIK_APP_PORT}
+    networks:
+      - web
+      - internal
+  app:
+    image: ${IMAGE}
+    restart: always
+    expose:
+      - "8000"
+    volumes:
+      - app_media:/app/media
+    environment: ${BACKEND_ENV}
+    depends_on:
+      - database
+    networks:
+      - internal
+  database:
+    image: liupeng0518/mysql:5.7-arm64
+    restart: always
+    environment: ${DATABASE_ENV}
+    expose:
+      - "3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - internal
+networks:
+  web:
+    external: true
+  internal:
+    external: false
