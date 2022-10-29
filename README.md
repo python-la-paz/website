@@ -15,7 +15,7 @@ Configurar los archivos .env
 
 Para levantar en produccion sin traefik
 ```sh
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.prod.local.yml up -d
 ```
 ## Producción con Traefik
 Para traefik copiar el archivo 
@@ -31,4 +31,10 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compos
 Para levantar en produccion con traefik en servidores ARM 64 
 ```sh
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.prod.traefik.yml -f docker-compose.prod.traefik.arm64.yml up -d
+```
+
+
+## Crear super usuario
+```
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.prod.traefik.yml -f docker-compose.prod.traefik.arm64.yml app python manage.py createsuperuser
 ```
