@@ -35,7 +35,7 @@ jobs:
       name: Build and push
       uses: docker/build-push-action@v3
       with:
-        context: .
+        context: ./website
         platforms: linux/amd64,linux/arm64
         push: true
         tags: ${{secrets.DOCKER_IMAGE}}:${{env.IMAGE_TAG}},${{secrets.DOCKER_IMAGE}}:latest
