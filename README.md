@@ -36,5 +36,5 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compos
 
 ## Crear super usuario
 ```
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.prod.traefik.yml -f docker-compose.prod.traefik.arm64.yml app python manage.py createsuperuser
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.prod.traefik.yml -f docker-compose.prod.traefik.arm64.yml exec app python manage.py createsuperuser
 ```
