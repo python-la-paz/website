@@ -39,50 +39,49 @@ jobs:
         context: ./website
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ${{secrets.DOCKER_IMAGE}}:${{env.IMAGE_TAG}},${{secrets.DOCKER_IMAGE}}:latest
-        
-  deploy:
-    needs: build
-    name: Deploy Image on Portainer
-    runs-on: ubuntu-latest
-    steps:
-    - 
-      name: Checkout
-      uses: actions/checkout@v2
+        tags: ${{secrets.DOCKER_IMAGE}}:${{env.IMAGE_TAG}},${{secrets.DOCKER_IMAGE}}:latest        
+  # deploy:
+  #   needs: build
+  #   name: Deploy Image on Portainer
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - 
+  #     name: Checkout
+  #     uses: actions/checkout@v2
 
-    - name: Read docker-compose.yml
-      id: composefile
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ./docker-compose.githubaction.yml
+  #   - name: Read docker-compose.yml
+  #     id: composefile
+  #     uses: juliangruber/read-file-action@v1
+  #     with:
+  #       path: ./docker-compose.githubaction.yml
 
-    - name: Echo composefile.yml
-      run: echo "${{ steps.composefile.outputs.content }}"
+  #   - name: Echo composefile.yml
+  #     run: echo "${{ steps.composefile.outputs.content }}"
 
-    - name: portainer stack deploy
-      uses: LGinC/portainer-stack-deploy@1.0
-      with:
-        # portainer server url
-        serverurl: ${{ secrets.PORTAINER_HOSTNAME }}
-        # portainer admin user name
-        username: ${{ secrets.PORTAINER_USERNAME }}
-        # portainer admin user password
-        password: ${{ secrets.PORTAINER_PASSWORD }}
-        # portainer EndpointId,default 1
-        endpointId: ${{ secrets.PORTAINER_ENDPOINT_ID }}
-        # name of stack, lowercase
-        imagenames: ${{secrets.DOCKER_IMAGE}}:${{env.IMAGE_TAG}}
-        stackname: ${{env.STACK_NAME}}
-        env: |
-          IMAGE=${{secrets.DOCKER_IMAGE}}:${{env.IMAGE_TAG}}
-          ${{secrets.PORTAINER_ENV}}
-        # variables: # optional
-        # # content of docker-compose.yml
-        # docker_compose: 
-        # docker-compose.yml in repository relative path
-        docker_compose: |
-          ${{ steps.composefile.outputs.content }}
-        # # username of git repository
-        # repo_username: # optional
-        # # password of git repository
-        # repo_password: # optional
+  #   - name: portainer stack deploy
+  #     uses: LGinC/portainer-stack-deploy@1.0
+  #     with:
+  #       # portainer server url
+  #       serverurl: ${{ secrets.PORTAINER_HOSTNAME }}
+  #       # portainer admin user name
+  #       username: ${{ secrets.PORTAINER_USERNAME }}
+  #       # portainer admin user password
+  #       password: ${{ secrets.PORTAINER_PASSWORD }}
+  #       # portainer EndpointId,default 1
+  #       endpointId: ${{ secrets.PORTAINER_ENDPOINT_ID }}
+  #       # name of stack, lowercase
+  #       imagenames: ${{secrets.DOCKER_IMAGE}}:${{env.IMAGE_TAG}}
+  #       stackname: ${{env.STACK_NAME}}
+  #       env: |
+  #         IMAGE=${{secrets.DOCKER_IMAGE}}:${{env.IMAGE_TAG}}
+  #         ${{secrets.PORTAINER_ENV}}
+  #       # variables: # optional
+  #       # # content of docker-compose.yml
+  #       # docker_compose: 
+  #       # docker-compose.yml in repository relative path
+  #       docker_compose: |
+  #         ${{ steps.composefile.outputs.content }}
+  #       # # username of git repository
+  #       # repo_username: # optional
+  #       # # password of git repository
+  #       # repo_password: # optional
