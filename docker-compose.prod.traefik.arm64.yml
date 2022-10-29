@@ -1,0 +1,4 @@
+version: '3.9' 
+services:
+  database:
+    image: liupeng0518/mysql:5.7-arm64

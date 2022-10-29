@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  web:
+    labels:
+      - traefik.http.routers.${TRAEFIK_ROUTE}.rule=Host(${TRAEFIK_APP_DOMAIN})
+      - traefik.http.routers.${TRAEFIK_ROUTE}.tls=true
+      - traefik.http.routers.${TRAEFIK_ROUTE}.tls.certresolver=lets-encrypt
+      - traefik.port=${TRAEFIK_APP_PORT}
+    networks:
+      - web
+      - internal
+  app:
+    networks:
+      - internal
+  database:
+    networks:
+      - internal
+networks:
+  web:
+    external: true
+  internal:
+    external: false
