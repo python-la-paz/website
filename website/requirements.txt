@@ -1,5 +1,5 @@
 Django>=4.1,<4.2
-wagtail>=4.0,<4.1
+wagtail>=4.1,<4.2
 wagtailsvg==0.0.35
 whitenoise==6.2.0
 mysqlclient==2.1.0

@@ -108,7 +108,8 @@
                         {% endif %}
                     </div>
                     <div class="col s12 m9 l9">
-                        <h5 class="">{{event.name}}
+                        <h5>
+                            <a class="black-text" href="{{event.url}}">{{event.name}}</a>
                             {% if event.state == "past" %}
                             <span class="badge " data-badge-caption="Finalizado" />
                             {% endif %}
@@ -188,7 +189,9 @@
                     <img class="circle  responsive-img" src="{{tmp_photo.url}}">
                 </div>
                 {% endif %}
-                <h5 class="center">{{organizer.name}}</h5>
+                <h5 class="center">
+                    <a class="black-text" href="{{organizer.url}}">{{organizer.name}}</a>
+                </h5>
                 <p class="light center">{{organizer.roles}}</p>
                 <div class="center">
                     {% with organizer.links|first as first_net %}
