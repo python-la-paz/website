@@ -1,0 +1,22 @@
+{
+    "short_name": "Python La Paz",
+    "name": "Comunidad de Python La Paz",
+    "icons": [
+        {
+            "src": "/static/icons/lpz_white192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/static/icons/lpz_white512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "id": "/",
+    "start_url": "/",
+    "background_color": "#E25D60",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#E25D60"
+}

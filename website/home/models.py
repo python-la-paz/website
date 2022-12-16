@@ -222,6 +222,8 @@ class Events(Page):
 
 class Organizers(Page):
     name = models.CharField(max_length=250)
+    about = RichTextField(blank=True)
+    detail = RichTextField(blank=True)
     banner = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -272,6 +274,8 @@ class Organizers(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel("name"),
+        FieldPanel("about"),
+        FieldPanel("detail"),
         FieldPanel("banner"),
         FieldPanel("image"),
         FieldPanel("city"),
