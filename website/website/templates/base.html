@@ -14,11 +14,26 @@
         {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
         {% endblock %}
     </title>
+    {% block seotags %}
+        <meta name="twitter:title" content="{{ page.name}}">
+        <meta name="twitter:image" content="{% static 'icons/lpz_color512.png' %}">
+
+        <meta property="og:title" content="{{ page.name}}" />
+
+        <meta property="og:image" content="{% static 'icons/lpz_color512.png' %}" />
+        
+        <meta itemprop="name" content="{{ page.name}}">
+        <meta itemprop='image' content="{% static 'icons/lpz_color512.png' %}" />
+
+    {% endblock %}
+    
+
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#E25D60">
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#E25D60">
     <meta name="description" content="Comunidad de Python La Paz" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/apple-touch-icon.png' %}">
+    <link rel="Shortcut Icon" type="image/x-icon"  href="{% static 'icons/favicon.ico' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icons/favicon-16x16.png' %}">
     {# Force all links in the live preview panel to be opened in a new tab #}

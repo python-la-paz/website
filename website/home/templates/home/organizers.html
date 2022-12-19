@@ -7,46 +7,46 @@
 
 {% block content %}
 <div id="index-banner" class="parallax-container">
-    <div class="section no-pad-bot">
-        <div class="container">
-            <br><br>
-            <div class="header">
-                <h2 class="light">
-                    {{ page.name}}
+    <div class="container">
+        <br><br>
+        <div class="header">
+            <h4 class="light">
+                {{ page.name}}
 
-                </h2>
-                <h5 class="light">
-                    {{ page.city}}
-                </h5>
-                <h6 class="light">
-                    {{ page.roles}}
-                </h6>
-            </div>
-            <div class="row">
-                {% for link in page.links %}
-                {% if link.value.image is not none %}
-                {% image link.value.image format-webp-lossless as tmp_photo_link %}
-                <a class="btn-floating btn-flat waves-effect waves-light transparent btn-floating-svg"
-                    href="{{link.value.link}}" target="_blank">
-                    <img src="{{tmp_photo_link.url}}" width="100%" alt="{{link.value.name}}" />
-                </a>
-                {% else %}
-                {% if link.value.imageSVG is not none %}
-                <a class="btn-floating btn-flat waves-effect waves-light transparent btn-floating-svg"
-                    href="{{link.value.link}}" target="_blank">
-                    <img src="{{link.value.imageSVG.url}}" width="100%" alt="{{link.value.name}}" />
-                </a>
-                {% else %}
-                <a class="btn-floating btn-flat waves-effect waves-light transparent" href="{{link.value.link}}"
-                    target="_blank">
-                    <i class="material-icons">{{link.value.icon}}</i>
-                </a>
-                {% endif %}
-                {% endif %}
-                {% endfor %}
-            </div>
-            <br><br>
+            </h4>
+            <h5 class="light">
+                {{ page.city}}
+            </h5>
+            <h6 class="light">
+                {{ page.roles}}
+            </h6>
         </div>
+        <div class="row">
+            {% for link in page.links %}
+            {% if link.value.image is not none %}
+            {% image link.value.image format-webp-lossless as tmp_photo_link %}
+            <a class="btn-floating btn-flat waves-effect waves-light transparent btn-floating-svg"
+                href="{{link.value.link}}" target="_blank">
+                <img src="{{tmp_photo_link.url}}" width="100%" alt="{{link.value.name}}" />
+            </a>
+            {% else %}
+            {% if link.value.imageSVG is not none %}
+            <a class="btn-floating btn-flat waves-effect waves-light transparent btn-floating-svg"
+                href="{{link.value.link}}" target="_blank">
+                <img src="{{link.value.imageSVG.url}}" width="100%" alt="{{link.value.name}}" />
+            </a>
+            {% else %}
+            <a class="btn-floating btn-flat waves-effect waves-light transparent" href="{{link.value.link}}"
+                target="_blank">
+                <i class="material-icons">{{link.value.icon}}</i>
+            </a>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+        </div>
+        <br><br>
+    </div>
+    <div class="section no-pad-bot">
     </div>
 
     {% image page.banner format-webp-lossless as tmp_photo %}
@@ -115,4 +115,16 @@
 
 {% endblock content %}
 
+{% block seotags %}
+    {% image page.image fill-512x512 format-webp-lossless as tmp_photo %}
+    <meta name="twitter:title" content="{{ page.name}}">
+    <meta name="twitter:image" content="{{tmp_photo.url}}">
 
+    <meta property="og:title" content="{{ page.name}}" />
+
+    <meta property="og:image" content="{{tmp_photo.url}}" />
+    
+    <meta itemprop="name" content="{{ page.name}}">
+    <meta itemprop='image' content='{{tmp_photo.url}}' />
+
+{% endblock %}

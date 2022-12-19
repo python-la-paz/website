@@ -7,42 +7,42 @@
 
 {% block content %}
 <div id="index-banner" class="parallax-container">
-    <div class="section no-pad-bot">
-        <div class="container">
-            <br><br>
-            <div class="header  ">
-                {{ page.header|richtext }}
-            </div>
-            <div class="row ">
-
-                <h5 class="header col s12 light">{{ page.small_header|richtext }}</h5>
-            </div>
-            <div class="row">
-                {% for link in page.links %}
-                {% if link.value.image is not none %}
-                {% image link.value.image format-webp-lossless as tmp_photo_link %}
-                <a class="btn-floating btn-flat waves-effect waves-light transparent btn-floating-svg"
-                    href="{{link.value.link}}" target="_blank">
-                    <img src="{{tmp_photo_link.url}}" width="100%" alt="{{link.value.name}}" />
-                </a>
-                {% else %}
-                {% if link.value.imageSVG is not none %}
-                <a class="btn-floating btn-flat waves-effect waves-light transparent btn-floating-svg"
-                    href="{{link.value.link}}" target="_blank">
-                    <img src="{{link.value.imageSVG.url}}" width="100%" alt="{{link.value.name}}" />
-                </a>
-                {% else %}
-                <a class="btn-floating btn-flat waves-effect waves-light transparent" href="{{link.value.link}}"
-                    target="_blank">
-                    <i class="material-icons">{{link.value.icon}}</i>
-                </a>
-                {% endif %}
-                {% endif %}
-                {% endfor %}
-            </div>
-            <br><br>
-
+    <div class="container">
+        <br><br>
+        <div class="header  ">
+            {{ page.header|richtext }}
         </div>
+        <div class="row ">
+
+            <h5 class="header col s12 light">{{ page.small_header|richtext }}</h5>
+        </div>
+        <div class="row">
+            {% for link in page.links %}
+            {% if link.value.image is not none %}
+            {% image link.value.image format-webp-lossless as tmp_photo_link %}
+            <a class="btn-floating btn-flat waves-effect waves-light transparent btn-floating-svg"
+                href="{{link.value.link}}" target="_blank">
+                <img src="{{tmp_photo_link.url}}" width="100%" alt="{{link.value.name}}" />
+            </a>
+            {% else %}
+            {% if link.value.imageSVG is not none %}
+            <a class="btn-floating btn-flat waves-effect waves-light transparent btn-floating-svg"
+                href="{{link.value.link}}" target="_blank">
+                <img src="{{link.value.imageSVG.url}}" width="100%" alt="{{link.value.name}}" />
+            </a>
+            {% else %}
+            <a class="btn-floating btn-flat waves-effect waves-light transparent" href="{{link.value.link}}"
+                target="_blank">
+                <i class="material-icons">{{link.value.icon}}</i>
+            </a>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+        </div>
+        <br><br>
+
+    </div>
+    <div class="section no-pad-bot">
     </div>
 
     {% image page.banner format-webp-lossless as tmp_photo %}
